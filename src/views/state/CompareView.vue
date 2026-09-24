@@ -29,19 +29,19 @@ const rows = [
 <template>
   <LabPage>
     <div class="grid-2">
-      <DemoBlock title="Pinia 计数">
+      <DemoBlock title="Pinia 计数" scene="顶栏未读数。任意页面调用同一个 store 加一，角标一起变。">
         <p>{{ piniaCount }}</p>
         <button type="button" @click="piniaCounter.inc()">+1</button>
       </DemoBlock>
-      <DemoBlock title="Vuex 计数">
+      <DemoBlock title="Vuex 计数" scene="还在用 Vuex 的旧后台里，同样的角标用 commit 改全局 count。">
         <p>{{ vuexCount }}</p>
         <button type="button" @click="vuex.commit('inc', 1)">commit +1</button>
       </DemoBlock>
-      <DemoBlock title="Pinia 购物车">
+      <DemoBlock title="Pinia 购物车" scene="详情页点加入购物车，顶栏件数和结算页清单读的是同一份 store。">
         <p>件数 {{ piniaCart.totalQty }}</p>
         <button type="button" @click="piniaCart.push({ id: 1, name: '钢笔', qty: 1 })">加钢笔</button>
       </DemoBlock>
-      <DemoBlock title="Vuex 购物车">
+      <DemoBlock title="Vuex 购物车" scene="旧电商的购物车模块。校验库存这种异步走 dispatch，改数量走 mutation。">
         <p>件数 {{ vuexQty }}</p>
         <button type="button" @click="pushVuex({ id: 1, name: '钢笔', qty: 1 })">加钢笔</button>
       </DemoBlock>

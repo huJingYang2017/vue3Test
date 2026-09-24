@@ -20,6 +20,7 @@ const stack = [
     <h1>{{ title }}</h1>
     <p class="lead">
       侧栏每一页都是一块可以点击的样例，详细说明写在对应的 <code>&lt;script setup&gt;</code> 里。
+      每个演示标题下有一行「用来干什么」，写的是这个特性在真实项目里解决什么问题。
       建议先看响应式，再看生命周期和组合式函数，最后把 Pinia、Vuex、路由和内置组件串起来。
     </p>
     <section class="stack">

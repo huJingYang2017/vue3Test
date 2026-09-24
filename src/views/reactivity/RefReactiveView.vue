@@ -53,14 +53,22 @@ function renameTitle() {
 
 <template>
   <LabPage>
-    <DemoBlock title="ref" hint="点按钮只改 count.value。模板写 count，不写 count.value。">
+    <DemoBlock
+      title="ref"
+      scene="计数器、开关、当前选中的标签、输入框里的字符串。这些值经常被整个换掉，页面要跟着变。"
+      hint="点按钮只改 count.value。模板写 count，不写 count.value。"
+    >
       <div class="row">
         <strong>{{ count }}</strong>
         <button type="button" @click="count++">+1</button>
       </div>
     </DemoBlock>
 
-    <DemoBlock title="reactive" hint="改属性会更新视图。整体替换要换一个 ref，而不是给 reactive 绑定重新赋值。">
+    <DemoBlock
+      title="reactive"
+      scene="用户资料、筛选条件这种字段固定的表单。改其中一个字段，比如把名字从空改成「李雷」，列表和提交按钮都要更新。"
+      hint="改属性会更新视图。整体替换要换一个 ref，而不是给 reactive 绑定重新赋值。"
+    >
       <label class="field">
         <span>名称</span>
         <input v-model="form.name" type="text" />
@@ -72,7 +80,11 @@ function renameTitle() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="ref 的自动解包" hint="对象属性会解包，数组元素不会。这是面试里很常见的追问。">
+    <DemoBlock
+      title="ref 的自动解包"
+      scene="接口返回的用户对象放进 reactive 后，模板可以直接写 user.name。表格行如果把每一格做成 ref 再放进数组，循环里仍然要写 .value。"
+      hint="对象属性会解包，数组元素不会。这是面试里很常见的追问。"
+    >
       <p>pocket.score = {{ pocket.score }}，scoreRef = {{ scoreRef }}</p>
       <div class="row">
         <button type="button" @click="pocket.score++">通过 reactive 属性 +1</button>

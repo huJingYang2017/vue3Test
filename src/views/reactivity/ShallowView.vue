@@ -20,6 +20,7 @@ watch(box, (value) => {
 
 function mutateInside() {
   box.value.hits += 1
+  console.log('mutateInside', box.value);
 }
 
 function replaceBox() {
@@ -63,6 +64,7 @@ function shootBag() {
   <LabPage>
     <DemoBlock
       title="shallowRef"
+      scene="地图、富文本、上万行表格的内部状态交给第三方库自己管。只有重新请求一整页、把 .value 换成新数据时，Vue 才重绘。"
       hint="先改内部，页面上的数字不动；再点「拍摄内存」，可以看到对象其实已经变了。替换 .value 或 triggerRef 都会让视图跟上。"
     >
       <p>视图中的 hits：{{ shownHits }}</p>
@@ -75,7 +77,11 @@ function shootBag() {
       <p>内存快照：{{ memory || '还没有拍摄' }}</p>
     </DemoBlock>
 
-    <DemoBlock title="shallowReactive" hint="根上的 id 会更新视图，嵌套的 hits 不会。">
+    <DemoBlock
+      title="shallowReactive"
+      scene="一份很大的页面配置，只关心顶层的主题、布局开关。里面嵌着编辑器自己的状态，不必整棵树都做成代理。"
+      hint="根上的 id 会更新视图，嵌套的 hits 不会。"
+    >
       <p>视图：id {{ bag.id }}，nested.hits {{ shownNested }}</p>
       <div class="row">
         <button type="button" @click="bag.id++">改根属性</button>

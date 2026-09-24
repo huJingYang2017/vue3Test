@@ -50,7 +50,11 @@ function loadSample() {
 
 <template>
   <LabPage>
-    <DemoBlock title="useToggle / useCounter" hint="两次调用 useCounter 得到两份独立状态。解构出来的 count 仍是 ref。">
+    <DemoBlock
+      title="useToggle / useCounter"
+      scene="弹层开关、点赞数、数量步进器。每个组件要自己的一份，不能全站共用一个布尔值。"
+      hint="两次调用 useCounter 得到两份独立状态。解构出来的 count 仍是 ref。"
+    >
       <div class="row">
         <button type="button" @click="toggle()">{{ panelOpen ? '收起' : '展开' }}</button>
         <span v-if="panelOpen">面板开着</span>
@@ -61,14 +65,22 @@ function loadSample() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="useLocalStorage" hint="刷新之后这段文字还在。键名是 vue3-lab:note。">
+    <DemoBlock
+      title="useLocalStorage"
+      scene="记住侧栏是否折叠、未提交的草稿、上次选的语言。刷新或明天再打开，还是上次离开时的样子。"
+      hint="刷新之后这段文字还在。键名是 vue3-lab:note。"
+    >
       <label class="field">
         <span>本地笔记</span>
         <textarea v-model="note" rows="3" />
       </label>
     </DemoBlock>
 
-    <DemoBlock title="useDebouncedRef" hint="停手大约 400ms 后，下面的句子才会跟上输入框。">
+    <DemoBlock
+      title="useDebouncedRef"
+      scene="搜索建议、地址联想。人还在打字时先别打接口，停手大约几百毫秒再请求。"
+      hint="停手大约 400ms 后，下面的句子才会跟上输入框。"
+    >
       <label class="field">
         <span>输入</span>
         <input v-model="keyword" type="text" />
@@ -76,13 +88,21 @@ function loadSample() {
       <p>防抖后的值：{{ keyword || '空' }}</p>
     </DemoBlock>
 
-    <DemoBlock title="useMouse / useWindowSize / useEventListener" hint="事件在组合式函数里注册，离开页面时 watchEffect 的清理函数会移除监听。">
+    <DemoBlock
+      title="useMouse / useWindowSize / useEventListener"
+      scene="拖拽排序跟着鼠标走。窗口变窄时把双列布局收成单列。离开页面要卸掉这些监听，不然会一直占着。"
+      hint="事件在组合式函数里注册，离开页面时 watchEffect 的清理函数会移除监听。"
+    >
       <p>指针 {{ x }}, {{ y }}</p>
       <p>窗口 {{ width }} × {{ height }}</p>
       <button ref="pad" type="button">{{ padText }}</button>
     </DemoBlock>
 
-    <DemoBlock title="useTitle / useFetch" hint="标题写入 document.title。连续点击加载会让上一次请求在 onWatcherCleanup 里被取消。">
+    <DemoBlock
+      title="useTitle / useFetch"
+      scene="进入文章详情把浏览器标题改成文章名。快速切换筛选时，取消还没回来的上一次列表请求，避免旧数据覆盖新结果。"
+      hint="标题写入 document.title。连续点击加载会让上一次请求在 onWatcherCleanup 里被取消。"
+    >
       <label class="field">
         <span>文档标题</span>
         <input v-model="pageTitle" type="text" />

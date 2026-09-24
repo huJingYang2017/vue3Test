@@ -35,7 +35,11 @@ function writeShallowRoot() {
 
 <template>
   <LabPage>
-    <DemoBlock title="readonly" hint="它是视图，不是快照。源对象一变，只读代理跟着变；反过来写会被拦住。">
+    <DemoBlock
+      title="readonly"
+      scene="把 store 里的用户、余额、权限传给纯展示组件。子组件能显示最新数据，但不能把余额改掉。"
+      hint="它是视图，不是快照。源对象一变，只读代理跟着变；反过来写会被拦住。"
+    >
       <p>源 n = {{ deepSource.n }}，只读 n = {{ deepLocked.n }}</p>
       <p>源 nested.n = {{ deepSource.nested.n }}，只读 nested.n = {{ deepLocked.nested.n }}</p>
       <div class="row">
@@ -45,7 +49,11 @@ function writeShallowRoot() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="shallowReadonly" hint="根属性写不进去。嵌套对象没有被包成只读，所以 nested.n 可以增加。">
+    <DemoBlock
+      title="shallowReadonly"
+      scene="交给插件一份配置：不允许插件把整份配置换成别的对象，但插件仍可以改自己那一层内部状态。"
+      hint="根属性写不进去。嵌套对象没有被包成只读，所以 nested.n 可以增加。"
+    >
       <p>根 n = {{ shallowLocked.n }}，嵌套 n = {{ shallowLocked.nested.n }}</p>
       <div class="row">
         <button type="button" @click="writeShallowRoot">尝试替换根属性</button>

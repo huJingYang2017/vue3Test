@@ -30,7 +30,11 @@ onBeforeRouteLeave(() => {
 
 <template>
   <LabPage>
-    <DemoBlock title="参数更新" hint="下面两个链接共用当前组件。切换时看本地日志里的 onBeforeRouteUpdate，全局日志里不会再出现 beforeEnter。">
+    <DemoBlock
+      title="参数更新"
+      scene="文章从 /post/1 切到 /post/2，页面组件不销毁。要在参数变化时重新拉正文，而不是继续显示上一篇。"
+      hint="下面两个链接共用当前组件。切换时看本地日志里的 onBeforeRouteUpdate，全局日志里不会再出现 beforeEnter。"
+    >
       <p>当前 step：{{ step }}</p>
       <div class="row">
         <RouterLink to="/ecosystem/router/1">步骤 1</RouterLink>
@@ -41,14 +45,22 @@ onBeforeRouteLeave(() => {
       </ol>
     </DemoBlock>
 
-    <DemoBlock title="离开确认" hint="勾选后，侧栏跳到别的页面会先询问。onBeforeRouteLeave 返回 false 或用户取消确认时，导航会停住。">
+    <DemoBlock
+      title="离开确认"
+      scene="编辑器里还有没保存的草稿。点侧栏或关掉页签前先问一句，取消就留在当前页。"
+      hint="勾选后，侧栏跳到别的页面会先询问。onBeforeRouteLeave 返回 false 或用户取消确认时，导航会停住。"
+    >
       <label class="row">
         <input v-model="dirty" type="checkbox" />
         有未保存的笔记
       </label>
     </DemoBlock>
 
-    <DemoBlock title="全局守卫日志" hint="beforeEach 改文档标题，beforeResolve 在导航确认前，afterEach 在导航确认后。组件内的离开守卫夹在 beforeEach 和 beforeEnter 之间。">
+    <DemoBlock
+      title="全局守卫日志"
+      scene="没登录就访问后台时，beforeEach 把人送到登录页，并在浏览器标题上带上当前页面名。"
+      hint="beforeEach 改文档标题，beforeResolve 在导航确认前，afterEach 在导航确认后。组件内的离开守卫夹在 beforeEach 和 beforeEnter 之间。"
+    >
       <ol v-if="navLog.length" class="log">
         <li v-for="line in navLog" :key="line.id">{{ line.text }}</li>
       </ol>

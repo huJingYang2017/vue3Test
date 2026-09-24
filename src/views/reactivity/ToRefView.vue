@@ -53,7 +53,11 @@ function addYear() {
 
 <template>
   <LabPage>
-    <DemoBlock title="toRef 保持连接" hint="plainTitle 是解构出来的字符串，title 是连着源对象的 ref。">
+    <DemoBlock
+      title="toRef 保持连接"
+      scene="组合式函数只拿出表单里的一个字段，比如把 userId 交给请求逻辑。输入框改了 id，请求参数和源表单还是同一份数据。"
+      hint="plainTitle 是解构出来的字符串，title 是连着源对象的 ref。"
+    >
       <label class="field">
         <span>toRef</span>
         <input v-model="title" type="text" />
@@ -64,7 +68,11 @@ function addYear() {
       <p>toValue 读到：{{ shouted() }}</p>
     </DemoBlock>
 
-    <DemoBlock title="toRefs" hint="改 scoreRef 会写回 state。点击新增年份后，源对象有 year，toRefs 的结果里没有。">
+    <DemoBlock
+      title="toRefs"
+      scene="useUser() 一次返回姓名、角色、积分。页面可以按字段解构，改积分时顶栏和资料卡一起变，不用把整个对象再传一遍。"
+      hint="改 scoreRef 会写回 state。点击新增年份后，源对象有 year，toRefs 的结果里没有。"
+    >
       <div class="row">
         <span>分数 {{ refs.score.value }}</span>
         <button type="button" @click="refs.score.value++">分数 +1</button>
@@ -74,7 +82,11 @@ function addYear() {
       <p>refs.year = {{ refs.year ? refs.year : 'toRefs 没有这个键' }}</p>
     </DemoBlock>
 
-    <DemoBlock title="缺省属性" hint="默认值只在属性缺失时使用。写入后，源对象才真正拥有 nickname。">
+    <DemoBlock
+      title="缺省属性"
+      scene="可选字段还没填时先显示「未填写」。用户一输入，这个值才写进即将提交的对象，空表单不会提前带上没用的键。"
+      hint="默认值只在属性缺失时使用。写入后，源对象才真正拥有 nickname。"
+    >
       <label class="field">
         <span>{{ profile.city }}</span>
         <input v-model="nickname" type="text" />

@@ -42,7 +42,11 @@ function saveName() {
 
 <template>
   <LabPage>
-    <DemoBlock title="Setup Store" hint="count 来自 storeToRefs。插件注入的 appName 每个 store 都能读到。$patch 一次加 5。">
+    <DemoBlock
+      title="Setup Store"
+      scene="全站未读数、当前登录用户。详情页改一次，顶栏和别的页面读到的是同一份数据。"
+      hint="count 来自 storeToRefs。插件注入的 appName 每个 store 都能读到。$patch 一次加 5。"
+    >
       <p>{{ counter.appName }} · 计数 {{ count }} · 双倍 {{ doubled }}</p>
       <p>{{ actionText }}</p>
       <div class="row">
@@ -52,7 +56,11 @@ function saveName() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="Options Store" hint="没有 mutation。action 里直接改 this.name。$reset 回到 state() 的初始值。名字会写入 localStorage。">
+    <DemoBlock
+      title="Options Store"
+      scene="用户资料这种有明确初始值的状态。退出登录时 $reset 一次回到未登录，不用自己把每个字段清掉。"
+      hint="没有 mutation。action 里直接改 this.name。$reset 回到 state() 的初始值。名字会写入 localStorage。"
+    >
       <p>{{ user.label }}</p>
       <label class="field">
         <span>名字</span>
@@ -65,7 +73,11 @@ function saveName() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="另一个 store 就是另一个模块" hint="购物车不需要 namespaced。pushLater 在 action 里等待 400ms 再改 state。">
+    <DemoBlock
+      title="另一个 store 就是另一个模块"
+      scene="购物车和用户拆开。结算页只动购物车，不会把改昵称和加商品搅在同一个状态里。"
+      hint="购物车不需要 namespaced。pushLater 在 action 里等待 400ms 再改 state。"
+    >
       <p>件数 {{ cart.totalQty }}</p>
       <ul>
         <li v-for="item in cart.items" :key="item.id">{{ item.name }} × {{ item.qty }}</li>
@@ -77,7 +89,11 @@ function saveName() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="插件订阅" hint="$subscribe 在变更提交之后触发。direct 表示直接改 state，patch object 表示 $patch 传入了对象。">
+    <DemoBlock
+      title="插件订阅"
+      scene="每次状态变化后写入本地草稿或打一条埋点。不用在每个加购、改数量的 action 里再手写一遍。"
+      hint="$subscribe 在变更提交之后触发。direct 表示直接改 state，patch object 表示 $patch 传入了对象。"
+    >
       <LogList :lines="piniaTrace" />
     </DemoBlock>
   </LabPage>

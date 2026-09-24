@@ -28,7 +28,11 @@ function closeMenu() {
 
 <template>
   <LabPage>
-    <DemoBlock title="useId 与 useTemplateRef" hint="全局还注册了 v-focus。带 false 时指令不会在挂载时抢焦点。">
+    <DemoBlock
+      title="useId 与 useTemplateRef"
+      scene="表单的 label 和 input 要配对，同一页有很多份时 id 不能撞。打开搜索弹层后，让输入框自动聚焦。"
+      hint="全局还注册了 v-focus。带 false 时指令不会在挂载时抢焦点。"
+    >
       <label class="field" :for="fieldId">
         <span>昵称</span>
         <input :id="fieldId" v-focus="false" class="text" type="text" />
@@ -39,7 +43,11 @@ function closeMenu() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="v-click-outside" hint="指令在 mounted 里监听 document，在 unmounted 里移除。点按钮外部会关闭菜单。">
+    <DemoBlock
+      title="v-click-outside"
+      scene="下拉菜单、日期面板、用户头像菜单。点到菜单外面就收起，不用每个页面自己写 document 点击判断。"
+      hint="指令在 mounted 里监听 document，在 unmounted 里移除。点按钮外部会关闭菜单。"
+    >
       <div class="row">
         <button type="button" @click="menuOpen = true">打开菜单</button>
       </div>
@@ -50,6 +58,7 @@ function closeMenu() {
 
     <DemoBlock
       title="指令钩子"
+      scene="给图表容器写 v-chart：元素挂上时初始化，尺寸变化时 resize，卸掉时 dispose，避免离开页面后图表还占着内存。"
       hint="v-trace 会在指令的 created、beforeMount、mounted、beforeUpdate、updated、beforeUnmount、unmounted 时记一行。改数字会触发 update。"
     >
       <div class="row">

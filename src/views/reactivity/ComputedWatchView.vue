@@ -143,7 +143,11 @@ function sampleEffect() {
 
 <template>
   <LabPage>
-    <DemoBlock title="computed 缓存" hint="只刷新无关计数时，计算属性的求值次数保持不变。方法每次调用都会算一遍。">
+    <DemoBlock
+      title="computed 缓存"
+      scene="购物车总价、搜索后的列表、表单能不能提交。这些都从现有数据算出来，商品没变就不用重新算一遍。"
+      hint="只刷新无关计数时，计算属性的求值次数保持不变。方法每次调用都会算一遍。"
+    >
       <p>计算属性 {{ doubled }}，求值 {{ computedHitsView }} 次</p>
       <p>方法结果 {{ methodResult }}，调用 {{ methodHits }} 次</p>
       <p>无关计数 {{ unrelated }}</p>
@@ -158,7 +162,11 @@ function sampleEffect() {
       </label>
     </DemoBlock>
 
-    <DemoBlock title="watch 的时机" hint="pre 读到旧 DOM，post 读到新 DOM。once 只记录第一次。暂停后，可暂停监听不再写日志。">
+    <DemoBlock
+      title="watch 的时机"
+      scene="筛选条件一变就重新请求列表。要量更新后的表格高度时用 flush: post。登录成功只跳转一次用 once。输入草稿时可以先暂停自动保存。"
+      hint="pre 读到旧 DOM，post 读到新 DOM。once 只记录第一次。暂停后，可暂停监听不再写日志。"
+    >
       <p>当前 n = <span ref="label">{{ n }}</span></p>
       <p>{{ postText }}</p>
       <p>{{ onceText }}</p>
@@ -169,7 +177,11 @@ function sampleEffect() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="深度" hint="改 hits 会触发默认深度遍历和精确来源。替换 folder 才会触发 deep: 1。">
+    <DemoBlock
+      title="深度"
+      scene="表单任意字段一改就标成「未保存」。订单详情只在整份订单被换成另一单时才重新拉关联数据，用 deep: 1 就够。"
+      hint="改 hits 会触发默认深度遍历和精确来源。替换 folder 才会触发 deep: 1。"
+    >
       <p>hits = {{ tree.folder.file.hits }}</p>
       <div class="row">
         <button type="button" @click="tree.folder.file.hits++">改深层 hits</button>
@@ -177,7 +189,11 @@ function sampleEffect() {
       </div>
     </DemoBlock>
 
-    <DemoBlock title="watchEffect" hint="它会立刻跑一次。每改一个字都会先清理上一次的定时器。">
+    <DemoBlock
+      title="watchEffect"
+      scene="搜索框、依赖好几个筛选条件的请求。内容一变就发请求，新的输入会先取消上一次还没回来的请求。"
+      hint="它会立刻跑一次。每改一个字都会先清理上一次的定时器。"
+    >
       <label class="field">
         <span>关键字</span>
         <input v-model="keyword" type="text" />

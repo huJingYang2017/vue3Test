@@ -3,6 +3,7 @@ export interface CheatCard {
   group: string
   title: string
   answer: string
+  scene: string
   pitfall: string
 }
 
@@ -12,6 +13,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'Vue 3 的响应式依赖什么？',
     answer: '对象用 Proxy 拦截读取和写入，ref 再把原始值包成带 .value 的对象。依赖在渲染或 computed / watch 读取时收集，写入时通知它们更新。',
+    scene: '表单字段和列表数据放进 ref 或 reactive 后，输入和接口赋值会自动刷新绑着它们的界面。',
     pitfall: 'Proxy 只能拦截对象。数字、字符串要先放进 ref。',
   },
   {
@@ -19,6 +21,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'ref 和 reactive 怎么选？',
     answer: '基本类型、以及需要整个替换的值用 ref。表单、配置这类固定结构的对象用 reactive。ref 里放对象时，.value 会被做成深层响应式。',
+    scene: '开关和当前选中的 id 用 ref。字段固定的用户资料用 reactive，改名字时资料卡跟着变。',
     pitfall: '不要把 reactive 对象再整体赋给一个普通变量，那样拿到的是新对象，页面还绑在旧代理上。',
   },
   {
@@ -26,6 +29,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: '模板里的 ref 为什么不用写 .value？',
     answer: '模板在渲染时会自动解包顶层 ref。reactive 对象的属性如果本身是 ref，也会解包。数组元素和 Map 的值不会按这个规则解包。',
+    scene: '模板里直接写 user.name。如果把每一格 ref 放进数组再循环，单元格里仍然要写 .value。',
     pitfall: '在 script 里解构 reactive 会得到普通值。要连接源对象时用 toRef 或 toRefs。',
   },
   {
@@ -33,6 +37,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'toRef 和 toRefs 差在哪？',
     answer: 'toRef 连接一个属性，toRefs 把每个已有属性都转成 ref。组合式函数返回状态时常用 toRefs，调用方可以按属性解构。',
+    scene: 'useUser() 把姓名、角色拆开返回。页面解构之后改积分，顶栏和资料卡还是连着同一份状态。',
     pitfall: 'toRefs 不会跟踪后来新增的键。Vue 3 里给 reactive 对象加新属性本身是响应式的，但已经生成的 toRefs 结果不会长出新字段。',
   },
   {
@@ -40,6 +45,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: '什么时候用 shallowRef？',
     answer: '大列表、编辑器状态、只整体替换的数据。shallowRef 只在替换 .value 时通知更新；改内部字段要再调用 triggerRef，或者换成一个新对象。',
+    scene: '地图、富文本、上万行表格交给第三方库自己改内部。只有重新请求一整页时，才让 Vue 重绘。',
     pitfall: 'shallowReactive 只代理第一层。嵌套对象的修改不会触发视图。',
   },
   {
@@ -47,6 +53,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'readonly 是拷贝吗？',
     answer: '不是。它是源对象的只读代理。改源对象，只读视图会跟着变；直接改只读视图，开发模式会警告，值保持不变。',
+    scene: '把余额和权限传给纯展示组件。子组件能显示最新值，但不能把余额改掉。',
     pitfall: 'shallowReadonly 挡不住嵌套对象上的修改。',
   },
   {
@@ -54,6 +61,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'computed 为什么有缓存？',
     answer: '依赖没变时，重复读取会返回上一次的结果。适合由现有状态推导出来的值。带 get / set 的 computed 可以配合 v-model。',
+    scene: '购物车总价、搜索后的列表、提交按钮是否可点。商品没变就不用重新算。',
     pitfall: '不要在 computed 里发请求或改别的状态。副作用放到 watch。',
   },
   {
@@ -61,6 +69,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'watch 和 watchEffect 怎么分？',
     answer: 'watch 明确指定来源，能拿到旧值和新值，默认不立即执行。watchEffect 立刻运行，并自动跟踪回调里读到的响应式数据，拿不到旧值。',
+    scene: '筛选条件一变就重新请求列表。搜索框则用 watchEffect，新输入先取消上一次还没回来的请求。',
     pitfall: '直接 watch 一个 reactive 对象会深度遍历，新旧值还是同一个对象。想看某一个字段时，写成 getter。',
   },
   {
@@ -68,6 +77,7 @@ export const cheatCards: CheatCard[] = [
     group: '响应式',
     title: 'flush 的 pre、post、sync 是什么？',
     answer: 'pre 是默认值，回调跑在组件渲染之前，所以 DOM 还是旧的。post 在 DOM 更新之后。sync 在数据写入时立刻执行。watchPostEffect 和 watchSyncEffect 是后两种的简写。',
+    scene: '新消息插入后要滚到底，等 DOM 更新完再读元素位置，用 flush: post 或 nextTick。',
     pitfall: '想在回调里读更新后的 DOM，用 flush: post 或 nextTick，不要用默认的 pre。',
   },
   {
@@ -75,6 +85,7 @@ export const cheatCards: CheatCard[] = [
     group: '生命周期',
     title: 'setup 对应哪些选项式钩子？',
     answer: 'setup 在 beforeCreate 和 created 的位置执行。组合式 API 没有 onBeforeCreate。挂载、更新、卸载分别对应 onBeforeMount、onMounted、onBeforeUpdate、onUpdated、onBeforeUnmount、onUnmounted。',
+    scene: '首屏请求和图表初始化放 onMounted。离开页面时在 onUnmounted 里断开 WebSocket、销毁图表。',
     pitfall: '父子顺序是：父 setup、父 beforeMount、渲染父组件时创建子组件、子 setup、子 beforeMount、子 mounted、父 mounted。',
   },
   {
@@ -82,6 +93,7 @@ export const cheatCards: CheatCard[] = [
     group: '生命周期',
     title: 'KeepAlive 会跳过哪些钩子？',
     answer: '首次进入仍会 mounted。之后被缓存移出时走 onDeactivated，再次显示走 onActivated，不会重复 mounted / unmounted。',
+    scene: '后台多页签切走再回来，表单里已经填的内容还在，不用重新挂载。',
     pitfall: '组件需要 name，include 才能按名字匹配。script setup 要用 defineOptions 写上 name。',
   },
   {
@@ -89,6 +101,7 @@ export const cheatCards: CheatCard[] = [
     group: '生命周期',
     title: 'nextTick 在等什么？',
     answer: '等这一轮响应式更新把 DOM 改完。它返回一个 Promise，所以可以 await nextTick() 再去读元素尺寸或文本。',
+    scene: '点新建之后等新输入框出现再聚焦，或把聊天记录滚到最新一条。',
     pitfall: '数据改完的下一行同步代码里，DOM 通常还是旧的。',
   },
   {
@@ -96,6 +109,7 @@ export const cheatCards: CheatCard[] = [
     group: '生命周期',
     title: 'onErrorCaptured 能接住什么？',
     answer: '子组件渲染、侦听器、生命周期和事件处理函数里的错误。返回 false 可以阻止错误继续传给父级和 app.config.errorHandler。',
+    scene: '某个卡片渲染失败时，只把这一块换成「加载失败」，整页后台还在。',
     pitfall: '它接不住自己这一层抛出的错误，只处理后代组件。',
   },
   {
@@ -103,6 +117,7 @@ export const cheatCards: CheatCard[] = [
     group: '组件',
     title: '组合式函数和 mixin 有什么差别？',
     answer: '组合式函数是普通函数，返回值由你决定，来源在 import 里就能看见。mixin 会把选项合并进组件，同名属性和生命周期的来源不直观。',
+    scene: '防抖、本地草稿、列表请求收成 useXxx。每个页面按需调用，来源在 import 里就能看到。',
     pitfall: '在组件外调用 useXxx 时，里面的 onMounted、watch 需要自己的 effectScope，否则没有组件实例可以依附。',
   },
   {
@@ -110,6 +125,7 @@ export const cheatCards: CheatCard[] = [
     group: '组件',
     title: '父组件为什么读不到子组件的变量？',
     answer: 'script setup 默认关闭。需要父组件调用的方法，用 defineExpose 列出来，父组件再用 useTemplateRef 取得组件实例。',
+    scene: '页头的保存按钮调用子表单的 validate()。打开弹层后，让里面的搜索框聚焦。',
     pitfall: '模板 ref 在挂载前是 null。在 onMounted 或事件回调里使用。',
   },
   {
@@ -117,6 +133,7 @@ export const cheatCards: CheatCard[] = [
     group: '状态',
     title: 'Pinia 为什么没有 mutation？',
     answer: 'action 里可以直接改 state，开发工具仍然能记录这次变化。storeToRefs 只拆 state 和 getter；action 直接解构，Pinia 已经把 this 绑好了。',
+    scene: '未读数和当前用户放在 store。详情页改一次，顶栏和其他页面读到的是同一份数据。',
     pitfall: 'Setup store 要自己写 reset。只有 Options store 自带 $reset。',
   },
   {
@@ -124,6 +141,7 @@ export const cheatCards: CheatCard[] = [
     group: '状态',
     title: 'Vuex 里 commit 和 dispatch 分别做什么？',
     answer: 'commit 执行同步 mutation，只有 mutation 应该改 state。dispatch 执行 action，action 负责异步，完成后再 commit。命名空间模块的类型要写成 cart/push。',
+    scene: '旧后台里改角标走 mutation，校验库存这种异步走 action。订单和用户拆成模块，避免同名提交撞车。',
     pitfall: 'strict 模式下绕过 mutation 改 state 会报错。生产环境通常关掉 strict，因为它要深度监听整棵树。',
   },
   {
@@ -131,6 +149,7 @@ export const cheatCards: CheatCard[] = [
     group: '工程',
     title: '组件内为什么没有 onBeforeRouteEnter？',
     answer: '进入前组件实例还不存在，setup 还没运行。能用的是路由配置上的 beforeEnter，以及组件里的 onBeforeRouteUpdate 和 onBeforeRouteLeave。',
+    scene: '文章 id 变了要重新拉正文。编辑器还有草稿时，离开页面前先确认，取消就留在当前页。',
     pitfall: '同一组件只换 params 时不会重新创建，所以不会再次走 mounted，要改 onBeforeRouteUpdate。',
   },
   {
@@ -138,6 +157,7 @@ export const cheatCards: CheatCard[] = [
     group: '工程',
     title: 'Vite 的环境变量怎么暴露给客户端？',
     answer: '只有以 VITE_ 开头的变量会出现在 import.meta.env 里。本项目的标题来自 .env 的 VITE_APP_TITLE。',
+    scene: '接口地址、站点标题这类可以公开的配置，打包后前端能读到。不同环境换 .env 即可，不用改代码。',
     pitfall: '不要把密钥放进 VITE_ 变量，它们会被打进前端包。',
   },
 ]
