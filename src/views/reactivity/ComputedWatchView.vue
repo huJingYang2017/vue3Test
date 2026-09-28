@@ -1,47 +1,58 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch, watchEffect, watchPostEffect } from 'vue'
-import { useTemplateRef } from 'vue'
-import DemoBlock from '@/components/ui/DemoBlock.vue'
-import LabPage from '@/components/ui/LabPage.vue'
-import LogList from '@/components/ui/LogList.vue'
-import { useLog } from '@/composables/useLog'
+import {
+  computed,
+  reactive,
+  ref,
+  watch,
+  watchEffect,
+  watchPostEffect,
+} from "vue";
+import { useTemplateRef } from "vue";
+import DemoBlock from "@/components/ui/DemoBlock.vue";
+import LabPage from "@/components/ui/LabPage.vue";
+import LogList from "@/components/ui/LogList.vue";
+import { useLog } from "@/composables/useLog";
 
-const { lines, push, clear } = useLog(12)
+const { lines, push, clear } = useLog(12);
 
 /**
  * computed 有缓存：依赖 base 不变时，重复读取不会重新执行 getter。
  * 下面用一个普通数字计数，避免在 computed 里写入另一个 ref，那样会把自己也变成依赖。
  * 正式代码不要在 computed 里做计数这种副作用，这里只为了把缓存看见。
  */
-const base = ref(1)
-const unrelated = ref(0)
-let computedHits = 0
-const computedHitsView = ref(0)
-const methodHits = ref(0)
-const methodResult = ref(0)
-const first = ref('Lin')
-const last = ref('Yu')
+const base = ref(1);
+const unrelated = ref(0);
+let computedHits = 0;
+const computedHitsView = ref(0);
+const methodHits = ref(0);
+const methodResult = ref(0);
+const first = ref("Lin");
+const last = ref("Yu");
 
 const doubled = computed(() => {
-  computedHits += 1
+  computedHits += 1;
+  console.log(1 + "computed");
+  // queueMicrotask 是浏览器和 Node 都有的内置函数，用来把一个回调排进微任务队列。当前这段同步代码全部跑完之后、下一轮定时器或渲染之前，这个回调就会执行。
   queueMicrotask(() => {
-    computedHitsView.value = computedHits
-  })
-  return base.value * 2
-})
+    computedHitsView.value = computedHits;
+    console.log(2 + "computed");
+  });
+  console.log(3 + "computed");
+  return base.value * 2;
+});
 
 const full = computed({
   get: () => `${first.value} ${last.value}`.trim(),
-  set(value: string) {
-    const [given = '', family = ''] = value.split(' ')
-    first.value = given
-    last.value = family
+  set: (value: string) => {
+    const [given = "", family = ""] = value.split(" ");
+    first.value = given;
+    last.value = family;
   },
-})
+});
 
 function runMethod() {
-  methodHits.value += 1
-  methodResult.value = base.value * 2
+  methodHits.value += 1;
+  methodResult.value = base.value * 2;
 }
 
 /**
@@ -49,44 +60,53 @@ function runMethod() {
  * flush 默认是 pre：回调时组件还没把新值写进 DOM。
  * post 在 DOM 更新之后。watchPostEffect 是 flush: 'post' 的简写，但没有旧值。
  */
-const n = ref(0)
-const label = useTemplateRef<HTMLElement>('label')
-const postText = ref('')
-const onceText = ref('尚未触发')
-const paused = ref(false)
+const n = ref(0);
+const label = useTemplateRef<HTMLElement>("label"); //useTemplateRef 是 Vue 3 新增的组合式 API，用来获取模板中 ref 引用的 DOM 元素。
+const postText = ref("");
+const onceText = ref("尚未触发");
+const paused = ref(false);
 
 watch(n, () => {
-  push(`pre：DOM 仍是「${label.value?.textContent ?? ''}」`)
-})
+  console.log(n + "pre");
+  push(`pre：DOM 仍是「${label.value?.textContent ?? ""}」`);
+});
 
 watch(
   n,
   () => {
-    push(`post：DOM 已是「${label.value?.textContent ?? ''}」`)
+    push(`post：DOM 已是「${label.value?.textContent ?? ""}」`);
   },
-  { flush: 'post' },
-)
+  { flush: "post" },
+
+  // flush 只有三个值：'pre'、'post'、'sync'。它决定 n 变了以后，回调排在组件更新的哪一步。
+
+  // 'pre' 是默认值，所以第 69 行那个 watch 没写 flush。点 n + 1 后，回调在组件重新渲染之前就跑。label 里的文字还是旧的，日志会是「DOM 仍是 0」。适合在渲染前改别的数据，让这次渲染直接用上新值。【监听值已更新，但DOM未更新】
+
+  // 'post' 就是你标出的这一处。回调等 DOM 更新完再跑，label.value.textContent 已经是新的 n。要量元素高度、滚动到新插入的一行，用这个。watchPostEffect 是它的简写，回调里没有旧值。【监听值已更新，DOM已更新】
+
+  // 'sync' 在 n.value 被改的那一行立刻执行，不等渲染，也不和其他改动合并。同一次点击里如果连续写了两次 n，它会跑两次；pre 和 post 只会在渲染前后各跑一次，看到的是最后那个值。它会打断 Vue 的批量更新，一般只在必须马上读到这次写入时才用。对应的简写是 watchSyncEffect。【监听值已更新，DOM已更新】
+);
 
 watchPostEffect(() => {
-  postText.value = `watchPostEffect：n=${n.value}，DOM=${label.value?.textContent ?? ''}`
-})
+  postText.value = `watchPostEffect：n=${n.value}，DOM=${label.value?.textContent ?? ""}`;
+});
 
 watch(
   n,
   (value) => {
-    onceText.value = `once 只记下第一次变化：${value}`
+    onceText.value = `once 只记下第一次变化：${value}`;
   },
   { once: true },
-)
+);
 
 const follow = watch(n, (value) => {
-  push(`可暂停监听：${value}`)
-})
+  push(`可暂停监听：${value}`);
+});
 
 function toggleFollow() {
-  if (paused.value) follow.resume()
-  else follow.pause()
-  paused.value = !paused.value
+  if (paused.value) follow.resume();
+  else follow.pause();
+  paused.value = !paused.value;
 }
 
 /**
@@ -94,50 +114,51 @@ function toggleFollow() {
  * deep: 1 只收集根上的属性，嵌套字段的修改不会触发。
  * 只关心某一个深层字段时，把来源写成 getter，而不是把整棵树都遍历一遍。
  */
-const tree = reactive({ folder: { file: { hits: 0 } } })
+const tree = reactive({ folder: { file: { hits: 0 } } });
 
 watch(tree, (value, oldValue) => {
-  push(`默认深度遍历，新旧是否同一引用：${value === oldValue}`)
-})
+  push(`默认深度遍历，新旧是否同一引用：${value === oldValue}`);
+});
 
 watch(
   tree,
   () => {
-    push('deep: 1 只看见根属性被替换')
+    push("deep: 1 只看见根属性被替换");
   },
   { deep: 1 },
-)
+);
 
 watch(
   () => tree.folder.file.hits,
   (value, oldValue) => {
-    push(`精确来源：${oldValue} → ${value}`)
+    push(`精确来源：${oldValue} → ${value}`);
   },
-)
+);
 
 /**
  * watchEffect 立刻执行，自动跟踪回调里读到的 keyword。
  * onCleanup 在下一次执行前运行，用来取消上一次的定时器。
  * 计数放在普通变量里，避免写 ref 时把 effect 自己变成死循环。
  */
-const keyword = ref('')
-let effectRuns = 0
-let cleanups = 0
-const effectReport = ref('输入后点采样')
+const keyword = ref("");
+let effectRuns = 0;
+let cleanups = 0;
+const effectReport = ref("输入后点采样");
 
 watchEffect((onCleanup) => {
-  const current = keyword.value
-  effectRuns += 1
-  const timer = window.setTimeout(() => undefined, 300)
+  console.log(4 + "watchEffect");
+  const current = keyword.value;
+  effectRuns += 1;
+  const timer = window.setTimeout(() => undefined, 300);
   onCleanup(() => {
-    cleanups += 1
-    window.clearTimeout(timer)
-  })
-  void current
-})
+    cleanups += 1;
+    window.clearTimeout(timer);
+  });
+  void current;
+});
 
 function sampleEffect() {
-  effectReport.value = `effect 执行 ${effectRuns} 次，清理 ${cleanups} 次`
+  effectReport.value = `effect 执行 ${effectRuns} 次，清理 ${cleanups} 次`;
 }
 </script>
 
@@ -167,12 +188,16 @@ function sampleEffect() {
       scene="筛选条件一变就重新请求列表。要量更新后的表格高度时用 flush: post。登录成功只跳转一次用 once。输入草稿时可以先暂停自动保存。"
       hint="pre 读到旧 DOM，post 读到新 DOM。once 只记录第一次。暂停后，可暂停监听不再写日志。"
     >
-      <p>当前 n = <span ref="label">{{ n }}</span></p>
+      <p>
+        当前 n = <span ref="label">{{ n }}</span>
+      </p>
       <p>{{ postText }}</p>
       <p>{{ onceText }}</p>
       <div class="row">
         <button type="button" @click="n++">n + 1</button>
-        <button type="button" @click="toggleFollow">{{ paused ? '恢复监听' : '暂停监听' }}</button>
+        <button type="button" @click="toggleFollow">
+          {{ paused ? "恢复监听" : "暂停监听" }}
+        </button>
         <button type="button" class="ghost" @click="clear">清空日志</button>
       </div>
     </DemoBlock>
@@ -184,8 +209,12 @@ function sampleEffect() {
     >
       <p>hits = {{ tree.folder.file.hits }}</p>
       <div class="row">
-        <button type="button" @click="tree.folder.file.hits++">改深层 hits</button>
-        <button type="button" @click="tree.folder = { file: { hits: 0 } }">替换根上的 folder</button>
+        <button type="button" @click="tree.folder.file.hits++">
+          改深层 hits
+        </button>
+        <button type="button" @click="tree.folder = { file: { hits: 0 } }">
+          替换根上的 folder
+        </button>
       </div>
     </DemoBlock>
 

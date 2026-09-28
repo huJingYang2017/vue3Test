@@ -65,7 +65,8 @@ class ChartPainter {
  * 放进 reactive 之后，它仍然是原来的实例，适合图表、地图这类有私有状态的对象。
  * toRaw 从代理拿回被代理的原对象。
  */
-const rawChart = markRaw(new ChartPainter('销量'))
+const rawChartCustom = new ChartPainter('销量')
+const rawChart = markRaw(rawChartCustom)
 const wrappedChart = reactive(new ChartPainter('库存'))
 const holder = reactive({ rawChart, wrappedChart })
 
@@ -116,6 +117,13 @@ function startScope() {
       scopeText.value = '作用域已停止，定时器已清理'
     })
   })
+
+// scope.run(() => {
+//   watch(keyword, () => search(keyword.value))
+//   watch(page, () => load(page.value))
+// })
+
+// scope.stop() // 两个 watch 一起停，不用各自保存返回值再逐个调用
 }
 
 function stopScope() {
@@ -149,6 +157,8 @@ onScopeDispose(() => scope?.stop())
     >
       <p>rawChart 是代理吗：{{ isReactive(holder.rawChart) ? '是' : '否' }}，{{ holder.rawChart.draw() }}</p>
       <p>直接 reactive 的类实例是代理吗：{{ isReactive(holder.wrappedChart) ? '是' : '否' }}，{{ holder.wrappedChart.draw() }}</p>
+      <p>holder.rawChart === holder.wrappedChart：{{ holder.rawChart === rawChart ? '是' : '否' }}</p>
+      <p>holder.wrappedChart === wrappedChart：{{ holder.wrappedChart === wrappedChart ? '是' : '否' }}</p>
       <p>toRaw(holder) === 原对象：{{ toRaw(holder).rawChart === rawChart ? '是' : '否' }}</p>
     </DemoBlock>
 

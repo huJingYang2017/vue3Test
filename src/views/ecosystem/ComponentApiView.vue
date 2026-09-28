@@ -16,6 +16,7 @@ const nickname = ref('阿宁')
 const passed = ref(2)
 const theme = ref<ThemeName>('墨色')
 
+// provide(钥匙, 值) 写在祖先的 setup 里。ThemeKey 只是 Symbol，真正传下去的是这个 ref。
 provide(ThemeKey, theme)
 
 const field = useTemplateRef<{ focus: () => void }>('field')
@@ -64,6 +65,12 @@ function toggleTheme() {
       scene="主题色、当前语言、表单校验上下文。中间隔了好几层布局，不用每一层都把 props 再传一次。"
       hint="主题没有经过 props 层层下传。ThemeLabel 用同一个 Symbol 取到这个 ref。"
     >
+      <ol class="log">
+        <li><code>const ThemeKey: InjectionKey&lt;Ref&lt;ThemeName&gt;&gt; = Symbol('theme')</code>：钥匙，用来查找，本身不能调用。</li>
+        <li><code>provide(ThemeKey, theme)</code>：写在祖先组件的 setup 里，把这个 ref 挂到钥匙上。</li>
+        <li><code>const theme = inject(ThemeKey, null)</code>：写在任意后代里。第二个参数是这条链上没有 provide 时的默认值。</li>
+      </ol>
+      <p>后代用的是 <code>inject</code> 取回来的 <code>theme</code>。父组件改 <code>theme.value</code>，子组件读到的是同一个 ref。</p>
       <div class="row">
         <button type="button" @click="toggleTheme">切换主题</button>
         <ThemeLabel />

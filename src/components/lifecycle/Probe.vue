@@ -21,6 +21,7 @@ const props = defineProps<{
   trace?: boolean
 }>()
 
+// inject 是 Vue 3 新增的组合式 API，用来注入依赖。
 const logger = inject(LifeLogKey, null)
 
 function push(hook: string) {
@@ -39,6 +40,7 @@ onActivated(() => push('onActivated'))
 onDeactivated(() => push('onDeactivated'))
 
 if (props.trace) {
+  // onRenderTracked 和 onRenderTriggered 是开发环境下的调试钩子，用来回答两个问题：这次渲染读了哪些响应式数据，以及是哪一次写入让组件要重新渲染。生产构建里它们不会执行，也不能用来写业务逻辑。
   onRenderTracked((event) => push(`onRenderTracked ${String(event.key)}`))
   onRenderTriggered((event) => push(`onRenderTriggered ${String(event.key)}`))
 }

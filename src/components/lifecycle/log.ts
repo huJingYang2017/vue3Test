@@ -5,3 +5,4 @@ export interface LifeLogger {
 }
 
 export const LifeLogKey: InjectionKey<LifeLogger> = Symbol('life-log')
+// hjy test 

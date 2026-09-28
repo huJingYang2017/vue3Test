@@ -121,6 +121,14 @@ export const cheatCards: CheatCard[] = [
     pitfall: '在组件外调用 useXxx 时，里面的 onMounted、watch 需要自己的 effectScope，否则没有组件实例可以依附。',
   },
   {
+    id: 'provide',
+    group: '组件',
+    title: 'provide 和 inject 怎么写？',
+    answer: '祖先的 setup 里写 provide(key, value)，后代写 inject(key, 默认值)。key 用 InjectionKey<T> = Symbol(...)，避免字符串重名。value 传入 ref 时，子组件拿到的是同一个 ref。',
+    scene: '主题、当前语言、表单上下文隔了好几层布局，不用每一层都转手 props。',
+    pitfall: 'Symbol 只是钥匙。要调用的函数写在 provide 的值里面，inject 取出来之后才能调用。',
+  },
+  {
     id: 'expose',
     group: '组件',
     title: '父组件为什么读不到子组件的变量？',

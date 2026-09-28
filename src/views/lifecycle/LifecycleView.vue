@@ -61,6 +61,7 @@ async function readDom() {
           <button type="button" class="ghost" @click="clear">清空</button>
         </div>
         <Probe v-if="showChild" label="子级" />
+          <!-- KeepAlive 把切走的组件留在内存里，而不是销毁。再显示时用的还是原来那一份实例，里面的输入、ref 和已经请求过的数据都还在。 -->
         <KeepAlive>
           <Probe v-if="showCached" label="缓存子级" />
         </KeepAlive>
