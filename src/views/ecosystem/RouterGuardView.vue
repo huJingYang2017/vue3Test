@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+// import { Modal } from 'ant-design-vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate, RouterLink, useRoute } from 'vue-router'
 import DemoBlock from '@/components/ui/DemoBlock.vue'
 import LabPage from '@/components/ui/LabPage.vue'
@@ -24,6 +25,22 @@ onBeforeRouteUpdate((to) => {
 
 onBeforeRouteLeave(() => {
   if (!dirty.value) return true
+
+  // return new Promise((resolve,reject) => {
+  //   // resolve(false)
+  //   reject(new Error('笔记还没保存，离开这一页吗？'))
+
+  // //   Modal.confirm({
+  // //     title: '笔记还没保存，离开这一页吗？',
+  // //     content: '笔记还没保存，离开这一页吗？',
+  // //     onOk: () => {
+  // //       resolve(true)
+  // //     },
+  // //     onCancel: () => {
+  // //       resolve(false)
+  // //     },
+  // //   // resolve(window.confirm('笔记还没保存，离开这一页吗？'))
+  // // })
   return window.confirm('笔记还没保存，离开这一页吗？')
 })
 </script>

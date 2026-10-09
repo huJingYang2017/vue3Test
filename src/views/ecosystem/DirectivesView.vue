@@ -46,13 +46,15 @@ function closeMenu() {
     <DemoBlock
       title="v-click-outside"
       scene="下拉菜单、日期面板、用户头像菜单。点到菜单外面就收起，不用每个页面自己写 document 点击判断。"
-      hint="指令在 mounted 里监听 document，在 unmounted 里移除。点按钮外部会关闭菜单。"
+      hint="指令挂在按钮和菜单共同的外层上。点这一层的外面才会关掉；再点打开按钮不算外部点击。"
     >
-      <div class="row">
-        <button type="button" @click="menuOpen = true">打开菜单</button>
-      </div>
-      <div v-if="menuOpen" v-click-outside="closeMenu" class="panel">
-        <p>点这一块的外面，菜单会关掉。</p>
+      <div v-click-outside="closeMenu">
+        <div class="row">
+          <button type="button" @click="menuOpen = true">打开菜单</button>
+        </div>
+        <div v-if="menuOpen" class="panel">
+          <p>点这一块的外面，菜单会关掉。</p>
+        </div>
       </div>
     </DemoBlock>
 

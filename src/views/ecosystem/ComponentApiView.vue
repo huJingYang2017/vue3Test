@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { provide, ref } from 'vue'
-import { useTemplateRef } from 'vue'
-import CountBox from '@/components/comm/CountBox.vue'
-import DestructureChild from '@/components/comm/DestructureChild.vue'
-import FocusField from '@/components/comm/FocusField.vue'
-import NameField from '@/components/comm/NameField.vue'
-import SlotCard from '@/components/comm/SlotCard.vue'
-import ThemeLabel from '@/components/comm/ThemeLabel.vue'
-import { ThemeKey, type ThemeName } from '@/components/comm/theme'
-import DemoBlock from '@/components/ui/DemoBlock.vue'
-import LabPage from '@/components/ui/LabPage.vue'
+import { provide, ref } from "vue";
+import { useTemplateRef } from "vue";
+import CountBox from "@/components/comm/CountBox.vue";
+import DestructureChild from "@/components/comm/DestructureChild.vue";
+import FocusField from "@/components/comm/FocusField.vue";
+import NameField from "@/components/comm/NameField.vue";
+import SlotCard from "@/components/comm/SlotCard.vue";
+import ThemeLabel from "@/components/comm/ThemeLabel.vue";
+import { ThemeKey, type ThemeName } from "@/components/comm/theme";
+import DemoBlock from "@/components/ui/DemoBlock.vue";
+import LabPage from "@/components/ui/LabPage.vue";
 
-const count = ref(0)
-const nickname = ref('阿宁')
-const passed = ref(2)
-const theme = ref<ThemeName>('墨色')
+const count = ref(0);
+const nickname = ref("阿宁");
+const passed = ref(2);
+const theme = ref<ThemeName>("墨色");
 
 // provide(钥匙, 值) 写在祖先的 setup 里。ThemeKey 只是 Symbol，真正传下去的是这个 ref。
-provide(ThemeKey, theme)
+provide(ThemeKey, theme);
 
-const field = useTemplateRef<{ focus: () => void }>('field')
+const field = useTemplateRef<{ focus: () => void }>("field");
 
 function onIncrement(step: number) {
-  count.value += step
+  count.value += step;
 }
 
 function toggleTheme() {
-  theme.value = theme.value === '墨色' ? '纸色' : '墨色'
+  theme.value = theme.value === "墨色" ? "纸色" : "墨色";
 }
 </script>
 
@@ -46,6 +46,13 @@ function toggleTheme() {
       hint="父组件仍持有 nickname。子组件里的输入框通过 defineModel 写回这里。"
     >
       <p>父组件看到：{{ nickname }}</p>
+      <button
+        type="button"
+        @click="nickname += `测试${parseInt(String(Math.random() * 10))}`"
+      >
+        修改昵称
+      </button>
+      <button type="button" @click="nickname = ''">清空昵称</button>
       <NameField v-model="nickname" />
     </DemoBlock>
 
@@ -66,11 +73,25 @@ function toggleTheme() {
       hint="主题没有经过 props 层层下传。ThemeLabel 用同一个 Symbol 取到这个 ref。"
     >
       <ol class="log">
-        <li><code>const ThemeKey: InjectionKey&lt;Ref&lt;ThemeName&gt;&gt; = Symbol('theme')</code>：钥匙，用来查找，本身不能调用。</li>
-        <li><code>provide(ThemeKey, theme)</code>：写在祖先组件的 setup 里，把这个 ref 挂到钥匙上。</li>
-        <li><code>const theme = inject(ThemeKey, null)</code>：写在任意后代里。第二个参数是这条链上没有 provide 时的默认值。</li>
+        <li>
+          <code
+            >const ThemeKey: InjectionKey&lt;Ref&lt;ThemeName&gt;&gt; =
+            Symbol('theme')</code
+          >：钥匙，用来查找，本身不能调用。
+        </li>
+        <li>
+          <code>provide(ThemeKey, theme)</code>：写在祖先组件的 setup 里，把这个
+          ref 挂到钥匙上。
+        </li>
+        <li>
+          <code>const theme = inject(ThemeKey, null)</code
+          >：写在任意后代里。第二个参数是这条链上没有 provide 时的默认值。
+        </li>
       </ol>
-      <p>后代用的是 <code>inject</code> 取回来的 <code>theme</code>。父组件改 <code>theme.value</code>，子组件读到的是同一个 ref。</p>
+      <p>
+        后代用的是 <code>inject</code> 取回来的 <code>theme</code>。父组件改
+        <code>theme.value</code>，子组件读到的是同一个 ref。
+      </p>
       <div class="row">
         <button type="button" @click="toggleTheme">切换主题</button>
         <ThemeLabel />
@@ -92,7 +113,9 @@ function toggleTheme() {
       hint="子组件把 n 从 props 里解构出来，并带了默认值。改父组件的 passed，子组件的加倍和 watch 会一起变。"
     >
       <div class="row">
-        <button type="button" @click="passed++">父组件 passed = {{ passed }}</button>
+        <button type="button" @click="passed++">
+          父组件 passed = {{ passed }}
+        </button>
       </div>
       <DestructureChild :n="passed" />
     </DemoBlock>

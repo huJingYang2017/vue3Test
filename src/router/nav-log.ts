@@ -12,6 +12,6 @@ export const navLog = reactive<NavLine[]>([])
 
 export function pushNav(text: string) {
   const clock = new Date().toLocaleTimeString()
-  navLog.unshift({ id: ++seed, text: `${clock}  ${text}` })
-  if (navLog.length > 12) navLog.pop()
+  navLog.unshift({ id: ++seed, text: `${clock}  ${text}` })//将新日志添加到数组开头
+  if (navLog.length > 12) navLog.pop()//如果日志长度大于12，则删除最后一个
 }

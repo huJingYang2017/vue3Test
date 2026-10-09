@@ -9,6 +9,7 @@ export interface LabMeta {
   nav?: string
 }
 
+//这里的 & 写在类型位置，表示交叉类型：一个值必须同时满足两边的类型。
 export type LabRoute = RouteRecordRaw & { meta: LabMeta }
 
 export const routes: LabRoute[] = [

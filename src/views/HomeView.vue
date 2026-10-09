@@ -43,7 +43,7 @@ const stack = [
         <li><code>onWatcherCleanup</code>：在 watch 里登记清理，适合取消请求。</li>
         <li>响应式 props 解构：<code>const { n = 0 } = defineProps()</code> 仍然是响应式的。</li>
         <li><code>watch</code> 的返回值可以 <code>pause</code> / <code>resume</code>，<code>deep</code> 可以写成数字。</li>
-        <li><code>&lt;Teleport defer&gt;</code>：等当前组件挂载后再把节点送到目标位置。</li>
+        <li><code>&lt;Teleport to="body"&gt;</code> 把节点挪出父级；<code>defer</code> 只在目标节点渲染得更晚时才需要。</li>
         <li><code>defineModel</code>：组件 v-model 的日常写法。</li>
       </ul>
     </section>

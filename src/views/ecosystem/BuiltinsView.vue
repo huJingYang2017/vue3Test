@@ -6,6 +6,7 @@ import DemoBlock from '@/components/ui/DemoBlock.vue'
 import LabPage from '@/components/ui/LabPage.vue'
 
 const open = ref(false)
+const localOpen = ref(false)
 const showText = ref(true)
 const ticket = ref(0)
 const alive = ref(true)
@@ -19,19 +20,45 @@ function reopen() {
   <LabPage>
     <DemoBlock
       title="Teleport"
-      scene="模态框、图片预览、右键菜单挂到 body。父级有 overflow: hidden 或很深的层叠时，弹层也不会被裁掉。"
-      hint="defer 等当前组件挂载后再传送。遮罩挂到 body 上，不会被本页的 overflow 或层叠上下文裁切。"
+      scene="弹层要盖住整页。留在父组件里时，父级的 overflow 和 transform 会把它裁掉；送到 body 之后，这些祖先影响不到它。"
+      hint="传送到 body 不用 defer，body 在页面打开时就存在。defer 只用在目标节点写在 Teleport 后面：渲染到 Teleport 时那个节点还不在文档里，要等当前组件挂载完再找。不加 defer，控制台会报找不到目标。"
     >
-      <button type="button" @click="open = true">打开传送层</button>
-      <Teleport to="body" defer>
-        <div v-if="open" class="modal-mask" @click.self="open = false">
-          <div class="modal" role="dialog" aria-modal="true">
-            <h2>这层节点在 body 下</h2>
-            <p>检查元素时，它不在 #app 的层级里面。</p>
-            <button type="button" @click="open = false">关闭</button>
+      <div class="teleport-demo">
+        <div class="clip-box">
+          <p>这个盒子有 overflow: hidden 和 transform。浮层仍是它的子节点。</p>
+          <button type="button" @click="localOpen = true">在盒子里打开</button>
+          <div v-if="localOpen" class="local-pop">
+            <p>上半截还在盒子里。</p>
+            <p>下半截超出了父级，被裁掉了，所以盖不住页面。</p>
+            <button type="button" @click="localOpen = false">关闭</button>
           </div>
         </div>
-      </Teleport>
+        <div>
+          <button type="button" @click="open = true">传送到 body</button>
+          <Teleport to="body">
+            <div v-if="open" class="modal-mask" @click.self="open = false">
+              <div class="modal" role="dialog" aria-modal="true">
+                <h2>这层节点在 body 下</h2>
+                <p>检查元素时，它不在这个盒子里，也不在 #app 的层级里面。父级因此裁不到它。</p>
+                <button type="button" @click="open = false">关闭</button>
+              </div>
+            </div>
+          </Teleport>
+        </div>
+      </div>
+      <div class="defer-demo">
+        <p>这句写在 Teleport 里。目标节点在模板的更后面，所以这里带了 defer。</p>
+        <!-- defer 要解决的是目标节点出现得更晚。比如 Teleport 写在模板前面，目标元素写在同一个组件的后面： 
+         <Teleport defer to="#dialog-root">...</Teleport>
+         <div id="dialog-root"></div>
+        -->
+        <Teleport defer to="#builtin-teleport-target">
+          <span class="pill">我被送到了后面的目标节点里。</span>
+        </Teleport>
+        <div id="builtin-teleport-target" class="late-target">
+          <span class="late-label">目标节点</span>
+        </div>
+      </div>
     </DemoBlock>
 
     <DemoBlock

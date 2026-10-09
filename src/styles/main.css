@@ -393,6 +393,59 @@ button.file-link:hover {
   box-shadow: var(--shadow);
 }
 
+.teleport-demo {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.clip-box {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  height: 148px;
+  padding: 0.8rem;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  background: #fffdf8;
+}
+
+.local-pop {
+  position: absolute;
+  left: 0.8rem;
+  right: 0.8rem;
+  top: 4.4rem;
+  height: 168px;
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  padding: 0.8rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.defer-demo {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.late-target {
+  min-height: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+}
+
+.late-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .rise-enter-active,
 .rise-leave-active { transition: 220ms ease; }
 .rise-enter-from,
