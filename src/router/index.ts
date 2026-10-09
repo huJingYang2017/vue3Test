@@ -15,7 +15,7 @@ export const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  document.title = `${to.meta.title ?? '预习台'} · Vue3 预习台`
+  document.title = `${to.meta.title ?? '预习台'} · ${import.meta.env.VITE_APP_TITLE}`
   pushNav(`beforeEach → ${to.path}`)
 })
 

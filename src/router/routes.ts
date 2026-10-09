@@ -204,4 +204,26 @@ export const routes: LabRoute[] = [
       summary: '自定义指令的全部钩子、useTemplateRef 和 useId。',
     },
   },
+  {
+    path: '/tooling/vite',
+    name: 'vite-webpack',
+    component: () => import('@/views/tooling/ViteWebpackView.vue'),
+    meta: {
+      title: 'Vite 与 Webpack',
+      group: '构建',
+      file: 'src/views/tooling/ViteWebpackView.vue',
+      summary: '开发时 Vite 为什么不用先打包，以及改一个文件后热更新怎么只换掉受影响的模块。',
+    },
+  },
+  {
+    path: '/tooling/performance',
+    name: 'browser-performance',
+    component: () => import('@/views/tooling/BrowserPerformanceView.vue'),
+    meta: {
+      title: '浏览器性能',
+      group: '构建',
+      file: 'src/views/tooling/BrowserPerformanceView.vue',
+      summary: '白屏和首屏各指哪一段，以及懒加载、图片和离开页面时的监听该怎么处理。',
+    },
+  },
 ]

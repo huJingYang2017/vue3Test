@@ -164,8 +164,8 @@ export const cheatCards: CheatCard[] = [
     id: 'vite',
     group: '工程',
     title: 'Vite 的环境变量怎么暴露给客户端？',
-    answer: '只有以 VITE_ 开头的变量会出现在 import.meta.env 里。本项目的标题来自 .env 的 VITE_APP_TITLE。',
-    scene: '接口地址、站点标题这类可以公开的配置，打包后前端能读到。不同环境换 .env 即可，不用改代码。',
+    answer: '只有以 VITE_ 开头的变量会出现在 import.meta.env 里。.env 给所有模式，.env.development、.env.production、.env.staging 按模式覆盖。',
+    scene: 'yarn dev 用开发地址，yarn build 用生产地址，yarn dev:staging 或 yarn build:staging 用预发地址。改 env 文件后要重启开发服务器。',
     pitfall: '不要把密钥放进 VITE_ 变量，它们会被打进前端包。',
   },
 ]

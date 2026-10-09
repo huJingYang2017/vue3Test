@@ -3,6 +3,8 @@ import { RouterLink } from 'vue-router'
 import { routes } from '@/router/routes'
 
 const title = import.meta.env.VITE_APP_TITLE
+const mode = import.meta.env.MODE
+const apiBase = import.meta.env.VITE_API_BASE
 
 const stack = [
   ['Vue 3.5', '组合式 API、响应式 props 解构、useTemplateRef、useId'],
@@ -18,6 +20,7 @@ const stack = [
   <article class="hero">
     <p class="eyebrow">从运行中的例子读 Vue 3</p>
     <h1>{{ title }}</h1>
+    <p class="lead">当前模式 <code>{{ mode }}</code>，接口地址 <code>{{ apiBase }}</code>。</p>
     <p class="lead">
       侧栏每一页都是一块可以点击的样例，详细说明写在对应的 <code>&lt;script setup&gt;</code> 里。
       每个演示标题下有一行「用来干什么」，写的是这个特性在真实项目里解决什么问题。
